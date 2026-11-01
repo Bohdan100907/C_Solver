@@ -35,6 +35,7 @@ add_library(miniai
     src/math/vector.c
     src/math/statistics.c
     include/miniai/math/statistics.h
+    src/ml/activation/sinc.c
 )
 add_library(miniai::miniai ALIAS miniai)
 
@@ -129,6 +130,9 @@ if(BUILD_TESTING)
     add_executable(lab03_a8_tests tests/lab03_a8_tests.c)
     target_link_libraries(lab03_a8_tests PRIVATE miniai::miniai)
     add_test(NAME lab03_a8_tests COMMAND lab03_a8_tests)
+    add_executable(sinc_tests tests/sinc_tests.c)
+    target_link_libraries(sinc_tests PRIVATE miniai::miniai)
+    add_test(NAME sinc_tests COMMAND sinc_tests)
 endif()
 
 add_executable(miniai_absolute_error_demo examples/absolute_error_demo.c)
