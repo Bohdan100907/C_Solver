@@ -28,7 +28,7 @@ add_library(miniai
     src/ml/activation/softsign.c
     include/miniai/ml/activation/onestep.h
     src/ml/activation/onestep.c
-
+    src/ml/loss/absolute_error.c
 )
 add_library(miniai::miniai ALIAS miniai)
 
@@ -56,6 +56,9 @@ add_executable(miniai_cli src/main.c)
 target_link_libraries(miniai_cli PRIVATE miniai::miniai)
 
 if(BUILD_TESTING)
+    add_executable(miniai_lab03_a1_tests tests/lab03_a1_tests.c)
+    target_link_libraries(miniai_lab03_a1_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_lab03_a1_tests COMMAND miniai_lab03_a1_tests)
     add_executable(miniai_activation_tests tests/activation_tests.c)
     target_link_libraries(miniai_activation_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_activation_tests COMMAND miniai_activation_tests)
@@ -83,6 +86,7 @@ if(BUILD_TESTING)
     target_link_libraries(miniai_onestep_demo PRIVATE miniai::miniai)
     add_test(NAME miniai_onestep_demo_smoke COMMAND miniai_onestep_demo)
 
+
     add_executable(miniai_lab03_a2_tests tests/lab03_a2_tests.c)
     target_link_libraries(miniai_lab03_a2_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_lab03_a2_tests COMMAND miniai_lab03_a2_tests)
@@ -90,4 +94,13 @@ if(BUILD_TESTING)
     add_executable(miniai_vector_add_demo examples/vector_add_demo.c)
     target_link_libraries(miniai_vector_add_demo PRIVATE miniai::miniai)
     add_test(NAME miniai_vector_add_demo_smoke COMMAND miniai_vector_add_demo)
+
+    add_executable(miniai_lab02_b4_tests tests/lab02_b4_tests.c)
+    target_link_libraries(miniai_lab02_b4_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_lab02_b4_tests COMMAND miniai_lab02_b4_tests)
+
 endif()
+
+add_executable(miniai_absolute_error_demo examples/absolute_error_demo.c)
+target_link_libraries(miniai_absolute_error_demo PRIVATE miniai::miniai)
+add_test(NAME miniai_absolute_error_demo COMMAND miniai_absolute_error_demo)
