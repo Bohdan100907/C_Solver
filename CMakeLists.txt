@@ -31,6 +31,8 @@ add_library(miniai
     src/ml/activation/onestep.c
     src/ml/loss/absolute_error.c
     src/math/vector.c
+    src/math/statistics.c
+    include/miniai/math/statistics.h
 )
 add_library(miniai::miniai ALIAS miniai)
 
@@ -45,7 +47,7 @@ if(UNIX AND NOT APPLE)
 endif()
 
 target_include_directories(miniai
-    PUBLIC
+        PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
@@ -61,13 +63,13 @@ if(BUILD_TESTING)
     target_link_libraries(miniai_activation_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_activation_tests COMMAND miniai_activation_tests)
     set_tests_properties(miniai_activation_tests PROPERTIES TIMEOUT 15)
-        add_executable(miniai_lab03_a3_tests tests/lab03_a3_tests.c)
+    add_executable(miniai_lab03_a3_tests tests/lab03_a3_tests.c)
     target_link_libraries(miniai_lab03_a3_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_lab03_a3_tests COMMAND miniai_lab03_a3_tests)
     if(MINIAI_ENABLE_ARCTAN_TESTS)
         target_compile_definitions(miniai_activation_tests PRIVATE MINIAI_ENABLE_ARCTAN_TESTS)
     endif()
-    
+
     add_executable(miniai_header_tests tests/header_tests.c)
     target_link_libraries(miniai_header_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_header_tests COMMAND miniai_header_tests)
@@ -88,6 +90,15 @@ if(BUILD_TESTING)
     target_link_libraries(miniai_lab02_b4_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_lab02_b4_tests COMMAND miniai_lab02_b4_tests)
 
+    add_executable(miniai_mean_tests tests/miniai_mean_tests.c)
+    target_link_libraries(miniai_mean_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_mean_tests COMMAND miniai_mean_tests)
+    set_tests_properties(miniai_mean_tests PROPERTIES TIMEOUT 15)
+
+    add_executable(miniai_lab03_b4_tests tests/lab03_b4_tests.c)
+    target_link_libraries(miniai_lab03_b4_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_lab03_b4_tests COMMAND miniai_lab03_b4_tests)
+
     add_executable(lab03_a8_tests tests/lab03_a8_tests.c)
     target_link_libraries(lab03_a8_tests PRIVATE miniai::miniai)
     add_test(NAME lab03_a8_tests COMMAND lab03_a8_tests)
@@ -96,3 +107,7 @@ endif()
 add_executable(miniai_absolute_error_demo examples/absolute_error_demo.c)
 target_link_libraries(miniai_absolute_error_demo PRIVATE miniai::miniai)
 add_test(NAME miniai_absolute_error_demo COMMAND miniai_absolute_error_demo)
+
+add_executable(miniai_population_variance_demo examples/population_variance_demo.c)
+target_link_libraries(miniai_population_variance_demo PRIVATE miniai::miniai)
+add_test(NAME miniai_population_variance_demo COMMAND miniai_population_variance_demo)
