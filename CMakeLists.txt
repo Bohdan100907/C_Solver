@@ -90,6 +90,10 @@ if(BUILD_TESTING)
     target_link_libraries(miniai_lab02_b4_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_lab02_b4_tests COMMAND miniai_lab02_b4_tests)
 
+    add_executable(miniai_absolute_error_derivative_tests tests/absolute_error_derivative_tests.c
+            tests/absolute_error_derivative_tests.c)
+    target_link_libraries(miniai_absolute_error_derivative_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_absolute_error_derivative_tests COMMAND miniai_absolute_error_derivative_tests)
     add_executable(miniai_mean_tests tests/miniai_mean_tests.c)
     target_link_libraries(miniai_mean_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_mean_tests COMMAND miniai_mean_tests)
