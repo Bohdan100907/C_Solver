@@ -8,37 +8,33 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 include(CTest)
 
-option(MINIAI_ENABLE_INVSQRT "Build unfinished InvSqrt and its tests (Lab 2 A3)" OFF)
+
 option(MINIAI_ENABLE_ARCTAN_TESTS "Run pending Arctan tests (Lab 2 A7)" OFF)
 
 add_library(miniai
-        src/math/vector.c
-        src/ml/activation/activation.c
-        src/ml/activation/bent.c
-        src/ml/activation/arctan.c
-        src/ml/activation/elu.c
-        src/ml/activation/gaussian.c
-        src/ml/activation/leaky_relu.c
-        src/ml/activation/relu.c
-        src/ml/activation/s_relu.c
-        src/ml/activation/sigmoid.c
-        src/ml/activation/sigmweight.c
-        src/ml/activation/softplus.c
-        src/ml/activation/soft_exponential.c
-        src/ml/activation/softsign.c
-        include/miniai/ml/activation/onestep.h
-        src/ml/activation/onestep.c
-        src/ml/loss/absolute_error.c
-        src/math/statistics.c
-        include/miniai/math/statistics.h
+    src/ml/activation/invsqrt.c
+    src/math/vector.c
+    src/ml/activation/activation.c
+    src/ml/activation/bent.c
+    src/ml/activation/arctan.c
+    src/ml/activation/elu.c
+    src/ml/activation/gaussian.c
+    src/ml/activation/leaky_relu.c
+    src/ml/activation/relu.c
+    src/ml/activation/s_relu.c
+    src/ml/activation/sigmoid.c
+    src/ml/activation/sigmweight.c
+    src/ml/activation/softplus.c
+    src/ml/activation/soft_exponential.c
+    src/ml/activation/softsign.c
+    include/miniai/ml/activation/onestep.h
+    src/ml/activation/onestep.c
+    src/ml/loss/absolute_error.c
+    src/math/vector.c
 )
 add_library(miniai::miniai ALIAS miniai)
 
-if(MINIAI_ENABLE_INVSQRT)
-    target_sources(miniai PRIVATE src/ml/activation/invsqrt.c)
-else()
-    message(WARNING "InvSqrt is unfinished: source and tests excluded until Lab 2 A3.")
-endif()
+
 
 if(NOT MINIAI_ENABLE_ARCTAN_TESTS)
     message(WARNING "Arctan is not validated: pending tests excluded until Lab 2 A7.")
@@ -68,9 +64,6 @@ if(BUILD_TESTING)
     add_executable(miniai_lab03_a3_tests tests/lab03_a3_tests.c)
     target_link_libraries(miniai_lab03_a3_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_lab03_a3_tests COMMAND miniai_lab03_a3_tests)
-    if(MINIAI_ENABLE_INVSQRT)
-        target_compile_definitions(miniai_activation_tests PRIVATE MINIAI_ENABLE_INVSQRT)
-    endif()
     if(MINIAI_ENABLE_ARCTAN_TESTS)
         target_compile_definitions(miniai_activation_tests PRIVATE MINIAI_ENABLE_ARCTAN_TESTS)
     endif()
@@ -79,6 +72,9 @@ if(BUILD_TESTING)
     target_link_libraries(miniai_header_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_header_tests COMMAND miniai_header_tests)
     add_test(NAME miniai_cli_smoke COMMAND miniai_cli)
+    add_executable(miniai_invsqrt_tests tests/invsqrt_tests.c)
+    target_link_libraries(miniai_invsqrt_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_invsqrt_tests COMMAND miniai_invsqrt_tests)
 
     add_executable(miniai_onestep_tests tests/onestep_tests.c)
     target_link_libraries(miniai_onestep_tests PRIVATE miniai::miniai)
@@ -104,6 +100,9 @@ if(BUILD_TESTING)
     add_executable(miniai_lab03_b4_tests tests/lab03_b4_tests.c)
     target_link_libraries(miniai_lab03_b4_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_lab03_b4_tests COMMAND miniai_lab03_b4_tests)
+    add_executable(lab03_a8_tests tests/lab03_a8_tests.c)
+    target_link_libraries(lab03_a8_tests PRIVATE miniai::miniai)
+    add_test(NAME lab03_a8_tests COMMAND lab03_a8_tests)
 endif()
 
 add_executable(miniai_absolute_error_demo examples/absolute_error_demo.c)
