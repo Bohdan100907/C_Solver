@@ -371,6 +371,7 @@ static void test_sigmweight(void) {
     double value = 0.0;
     double derivative = 0.0;
     double sig2;
+    const double test_points[] = {-1000.0, -1.0, 0.0, 1.0, 1000.0};
 
     expect_status(activation_sigmweight_init(&activation),
                   ACTIVATION_STATUS_OK, "initialize Sigmweight");
@@ -393,11 +394,38 @@ static void test_sigmweight(void) {
     expect_near(derivative, sig2 + 2.0 * sig2 * (1.0 - sig2),
                 "Sigmweight positive derivative");
 
+    /* Перевірка скінченності (не NaN і не Inf) на точках {-1000, -1, 0, 1, 1000} */
+    for (size_t i = 0; i < 5; ++i) {
+        const double x = test_points[i];
+        expect_status(activation_value(&activation, x, &value),
+                      ACTIVATION_STATUS_OK, "evaluate Sigmweight finite check");
+        expect_finite(value, "Sigmweight value finite");
+
+        expect_status(activation_derivative(&activation, x, &derivative),
+                      ACTIVATION_STATUS_OK, "differentiate Sigmweight finite check");
+        expect_finite(derivative, "Sigmweight derivative finite");
+    }
+    /* Перевірка лівого та правого насичення (асимптот) */
+    expect_status(activation_value(&activation, -1000.0, &value),
+                  ACTIVATION_STATUS_OK, "evaluate Sigmweight at -1000");
+    expect_near(value, 0.0, "Sigmweight large negative value");
+
+    expect_status(activation_derivative(&activation, -1000.0, &derivative),
+                  ACTIVATION_STATUS_OK, "differentiate Sigmweight at -1000");
+    expect_near(derivative, 0.0, "Sigmweight left saturation derivative");
+
+    expect_status(activation_value(&activation, 1000.0, &value),
+                  ACTIVATION_STATUS_OK, "evaluate Sigmweight at 1000");
+    expect_near(value, 1000.0, "Sigmweight large positive value");
+
+    expect_status(activation_derivative(&activation, 1000.0, &derivative),
+                  ACTIVATION_STATUS_OK, "differentiate Sigmweight at 1000");
+    expect_near(derivative, 1.0, "Sigmweight right saturation derivative");
+
     expect_status(activation_sigmweight_init(NULL),
                   ACTIVATION_STATUS_INVALID_ARGUMENT,
                   "reject null Sigmweight initializer");
 }
-
 
 static void test_soft_exponential(void) {
     Activation activation;
