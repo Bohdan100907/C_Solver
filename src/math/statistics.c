@@ -42,8 +42,7 @@ double miniai_stddev( const double data[], size_t n ) {
     else {
         return sqrt(val);
     }
-
-  
+}
 
 /* 
     Standardizes the input array to have a mean of 0 and stddev of 1.
