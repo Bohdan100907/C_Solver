@@ -2,38 +2,48 @@
 #include <math.h>
 #include <stddef.h>
 
-// ===================================
-// TEMPORARY MOCKS FOR DEPENDENCIES (B1 & B5)
-// Delete these two functions when B1 and B5 are merged!
-double miniai_mean(const double in[], size_t n) {
-    size_t index;
+
+double miniai_mean(const double data[], size_t n) {
+    if (data == NULL || n == 0) {
+        return NAN;
+    }
+
     double sum = 0.0;
 
-    if (in == NULL || n == 0) {
-        return NAN;
+    for (size_t i = 0; i < n; ++i) {
+        if (!isfinite(data[i])) {
+            return NAN;
+        }
+
+        sum += data[i];
     }
 
-    for (index = 0; index < n; ++index) {
-        sum += in[index];
-    }
     return sum / (double)n;
 }
-
-double miniai_stddev(const double in [], size_t n) {
-    size_t index;
-    double m;
-    double sum_sq = 0.0;
-
-    if (in == NULL || n <= 1) {
+double miniai_variance( const double data[], size_t n ) {
+    double sum = 0.0;
+    if ( n == 0 || data == NULL ) {
         return NAN;
     }
-    m = miniai_mean(in, n);
-    for (index = 0; index < n; ++index){
-        sum_sq += (in[index] - m) * (in[index] - m);
+    double mean = miniai_mean( data, n );
+    for ( size_t i = 0; i < n; i++ ) {
+        double diff = data[i] - mean;
+        sum += diff * diff;
     }
-    return sqrt(sum_sq / (double)(n - 1));
+
+    return sum/n;
 }
-// ===================================
+
+double miniai_stddev( const double data[], size_t n ) {
+    double val = miniai_variance(data, n);
+    if ( n == 0 || data == NULL ) {
+        return NAN;
+    }
+    else {
+        return sqrt(val);
+    }
+
+  
 
 /* 
     Standardizes the input array to have a mean of 0 and stddev of 1.
