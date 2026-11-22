@@ -1,5 +1,7 @@
 #include "miniai/math/statistics.h"
 #include <math.h>
+#include <stddef.h>
+
 
 double miniai_mean(const double data[], size_t n) {
     if (data == NULL || n == 0) {
@@ -40,4 +42,38 @@ double miniai_stddev( const double data[], size_t n ) {
     else {
         return sqrt(val);
     }
+
+  
+
+/* 
+    Standardizes the input array to have a mean of 0 and stddev of 1.
+    Formula: (x_i - mean) / stddev
+    Supports in-place operations if in == out.
+*/
+int miniai_standardize(const double in[], double out[], size_t n) {
+    size_t index;
+    double stddev;
+    double mean;
+
+    // Requirement: n=0 -> error
+    if (n == 0) {
+        return 1;
+    }
+
+    if (in == NULL || out == NULL){
+        return 2;
+    }
+    stddev = miniai_stddev(in, n);
+
+    // Requirement: std==0 -> error. Also handle NaN to avoid division by zero
+    if (!isfinite(stddev) || stddev == 0.0) {
+        return 3;
+    }
+    mean = miniai_mean(in, n);
+
+    for (index = 0; index < n; ++index) {
+        out[index] = (in[index] - mean) / stddev;
+    }
+
+    return 0;
 }

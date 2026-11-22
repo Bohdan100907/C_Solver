@@ -14,6 +14,7 @@ option(MINIAI_ENABLE_ARCTAN_TESTS "Run pending Arctan tests (Lab 2 A7)" OFF)
 add_library(miniai
     src/ml/activation/invsqrt.c
     src/math/vector.c
+    src/math/statistics.c
     src/ml/activation/activation.c
     src/ml/activation/bent.c
     src/ml/activation/arctan.c
@@ -96,6 +97,9 @@ if(BUILD_TESTING)
     target_link_libraries(miniai_lab02_b4_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_lab02_b4_tests COMMAND miniai_lab02_b4_tests)
 
+    add_executable(miniai_lab03_b7_tests tests/lab03_b7_tests.c)
+    target_link_libraries(miniai_lab03_b7_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_lab03_b7_tests COMMAND miniai_lab03_b7_tests)
     add_executable(miniai_absolute_error_derivative_tests tests/absolute_error_derivative_tests.c
             tests/absolute_error_derivative_tests.c)
     target_link_libraries(miniai_absolute_error_derivative_tests PRIVATE miniai::miniai)
