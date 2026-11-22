@@ -29,6 +29,7 @@ add_library(miniai
     src/ml/activation/softsign.c
     include/miniai/ml/activation/onestep.h
     src/ml/activation/onestep.c
+    src/ml/loss/binary_cross_entropy.c
     src/ml/loss/absolute_error.c
     src/math/vector.c
     src/math/statistics.c
@@ -74,6 +75,11 @@ if(BUILD_TESTING)
     target_link_libraries(miniai_header_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_header_tests COMMAND miniai_header_tests)
     add_test(NAME miniai_cli_smoke COMMAND miniai_cli)
+
+    add_executable(miniai_bce_derivative_tests tests/bce_derivative_tests.c)
+    target_link_libraries(miniai_bce_derivative_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_bce_derivative_tests COMMAND miniai_bce_derivative_tests)
+
     add_executable(miniai_invsqrt_tests tests/invsqrt_tests.c)
     target_link_libraries(miniai_invsqrt_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_invsqrt_tests COMMAND miniai_invsqrt_tests)
