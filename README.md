@@ -1448,6 +1448,35 @@ v1.8  STL Refactoring
 v2.0  MiniAI Framework
 ```
 
+## Binary cross-entropy API
+
+`double miniai_binary_cross_entropy(double prediction, double target);`
+
+Обчислює
+
+```text
+-[y log(p) + (1-y) log(1-p)]
+```
+
+де `p` — прогноз моделі, а `y` — цільове значення або soft label. Обидва
+аргументи повинні бути скінченними числами з діапазону `[0,1]`; інакше
+функція повертає `NAN`.
+
+Для числової стійкості прогноз спочатку перетворюється спільною функцією
+clipping у `[eps, 1-eps]`, де `eps = 1e-12`. Відповідно реалізація
+використовує `log1p(-p_c)`. На межах насичення це **modified loss**: прогноз
+`p=0` або `p=1` отримує скінченну модифіковану вартість замість `-Infinity`
+або `Infinity`.
+
+Приклад:
+
+```c
+#include "miniai/ml/loss/binary_cross_entropy.h"
+
+double loss = miniai_binary_cross_entropy(0.5, 1.0);
+/* ln(2) */
+```
+
 ## Фінальна мета
 
 Не:
