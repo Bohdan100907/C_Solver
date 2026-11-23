@@ -34,6 +34,15 @@ static void expect_nonzero(int actual, const char *message)
     }
 }
 
+static void expect_true(int condition, const char *message)
+{
+    ++checks;
+    if (!condition) {
+        fprintf(stderr, "FAIL: %s\n", message);
+        ++failures;
+    }
+}
+
 static void test_mandatory(void)
 {
     const double in[] = {0.0, 5.0, 10.0};
@@ -100,6 +109,16 @@ static void test_nonfinite(void)
     expect_near(out[0], 1.0, "non-finite failure leaves output unchanged");
 }
 
+static void test_min_and_max_dependencies(void)
+{
+    const double in[] = {-3.0, 0.0, 8.0};
+
+    expect_near(miniai_min(in, 3), -3.0, "B2 minimum dependency");
+    expect_near(miniai_max(in, 3), 8.0, "B3 maximum dependency");
+    expect_true(isnan(miniai_min(NULL, 0)), "minimum rejects empty input");
+    expect_true(isnan(miniai_max(NULL, 0)), "maximum rejects empty input");
+}
+
 int main(void)
 {
     test_mandatory();
@@ -108,6 +127,7 @@ int main(void)
     test_null_arguments();
     test_constant_array();
     test_nonfinite();
+    test_min_and_max_dependencies();
 
     if (failures != 0) {
         fprintf(stderr, "%d of %d checks failed\n", failures, checks);

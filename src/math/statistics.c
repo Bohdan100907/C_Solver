@@ -20,6 +20,45 @@ double miniai_mean(const double data[], size_t n) {
 
     return sum / (double)n;
 }
+
+double miniai_min(const double data[], size_t n) {
+    if (data == NULL || n == 0) {
+        return NAN;
+    }
+
+    double minimum = data[0];
+
+    for (size_t i = 0; i < n; ++i) {
+        if (!isfinite(data[i])) {
+            return NAN;
+        }
+        if (data[i] < minimum) {
+            minimum = data[i];
+        }
+    }
+
+    return minimum;
+}
+
+double miniai_max(const double data[], size_t n) {
+    if (data == NULL || n == 0) {
+        return NAN;
+    }
+
+    double maximum = data[0];
+
+    for (size_t i = 0; i < n; ++i) {
+        if (!isfinite(data[i])) {
+            return NAN;
+        }
+        if (data[i] > maximum) {
+            maximum = data[i];
+        }
+    }
+
+    return maximum;
+}
+
 double miniai_variance( const double data[], size_t n ) {
     double sum = 0.0;
     if ( n == 0 || data == NULL ) {
@@ -79,23 +118,19 @@ int miniai_standardize(const double in[], double out[], size_t n) {
 
 int miniai_minmax_scale(const double in[], double out[], size_t n)
 {
-    if (n == 0 || in == NULL || out == NULL) {
+    if (n == 0) {
         return 1;
     }
 
-    double minimum = in[0];
-    double maximum = in[0];
+    if (in == NULL || out == NULL) {
+        return 2;
+    }
 
-    for (size_t i = 0; i < n; ++i) {
-        if (!isfinite(in[i])) {
-            return 2;
-        }
-        if (in[i] < minimum) {
-            minimum = in[i];
-        }
-        if (in[i] > maximum) {
-            maximum = in[i];
-        }
+    double minimum = miniai_min(in, n);
+    double maximum = miniai_max(in, n);
+
+    if (!isfinite(minimum) || !isfinite(maximum)) {
+        return 3;
     }
 
     if (maximum == minimum) {
