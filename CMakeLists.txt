@@ -35,6 +35,7 @@ add_library(miniai
     src/math/vector.c
     src/math/statistics.c
     include/miniai/math/statistics.h
+    src/ml/activation/sinc.c
 )
 add_library(miniai::miniai ALIAS miniai)
 
@@ -97,6 +98,15 @@ if(BUILD_TESTING)
     target_link_libraries(miniai_onestep_demo PRIVATE miniai::miniai)
     add_test(NAME miniai_onestep_demo_smoke COMMAND miniai_onestep_demo)
 
+
+    add_executable(miniai_lab03_a2_tests tests/lab03_a2_tests.c)
+    target_link_libraries(miniai_lab03_a2_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_lab03_a2_tests COMMAND miniai_lab03_a2_tests)
+
+    add_executable(miniai_vector_add_demo examples/vector_add_demo.c)
+    target_link_libraries(miniai_vector_add_demo PRIVATE miniai::miniai)
+    add_test(NAME miniai_vector_add_demo_smoke COMMAND miniai_vector_add_demo)
+
     add_executable(miniai_lab02_b4_tests tests/lab02_b4_tests.c)
     target_link_libraries(miniai_lab02_b4_tests PRIVATE miniai::miniai)
     add_test(NAME miniai_lab02_b4_tests COMMAND miniai_lab02_b4_tests)
@@ -124,6 +134,13 @@ if(BUILD_TESTING)
     add_executable(lab03_a8_tests tests/lab03_a8_tests.c)
     target_link_libraries(lab03_a8_tests PRIVATE miniai::miniai)
     add_test(NAME lab03_a8_tests COMMAND lab03_a8_tests)
+    add_executable(sinc_tests tests/sinc_tests.c)
+    target_link_libraries(sinc_tests PRIVATE miniai::miniai)
+    add_test(NAME sinc_tests COMMAND sinc_tests)
+    
+    add_executable(miniai_lab03_a4_tests tests/lab03_a4_tests.c)
+    target_link_libraries(miniai_lab03_a4_tests PRIVATE miniai::miniai)
+    add_test(NAME miniai_lab03_a4_tests COMMAND miniai_lab03_a4_tests)
 endif()
 
 add_executable(miniai_absolute_error_demo examples/absolute_error_demo.c)
